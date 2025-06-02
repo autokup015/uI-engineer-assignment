@@ -7,18 +7,20 @@ How to use
 ```ts
 <Input.MultipleInput
   value={textList}
-  setValue={(val) => onSetValue(val)}
-  limitItem={5} // optional
-  specialText="+ " // optional
+  onSetValue={(val) => onSetValue(val)}
+  onDeleteValue={(val) => onDeleteValue(val)}
+  // limitItem={5}
+  // specialText="+ "
 />
 ```
 
 # Explan props
 
 1. value = state array, you can add every key in array object but this value must have id and text key only
-2. setValue = callback function when component have some action such as add or remove, this setvalue will call and sent value on (val) => {...}
-3. limitItem (optional) = limit for add text, when you use 5 value can have 5 unit only, but you dont use limitItem you can add until you tired
-4. specialText (optional) = special key when you focus out input, default special is ', ' it can be use another special key that you want
+2. onSetValue = callback function when component have some action such as add or remove, this setvalue will call and sent value on (val) => {...}
+3. onDeleteValue = component will send back value for handle remove by your condition
+4. limitItem (optional) = limit for add text, when you use 5 value can have 5 unit only, but you dont use limitItem you can add until you tired
+5. specialText (optional) = special key when you focus out input, default special is ', ' it can be use another special key that you want
 
 # How to use
 

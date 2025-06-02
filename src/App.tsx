@@ -1,21 +1,27 @@
 import { Input } from "./components/custom-input";
 import type { TInputList } from "./types/tag-input-types";
 
-
 import { useState } from "react";
 
-type TTextList = Array<TInputList>;
+// declare for union type
+type TTextList = TInputList;
 
 // ---------------------------------------------------------------------------------
 
 const App = () => {
-  const [textList, setTextList] = useState<TTextList>([]);
+  const [textList, setTextList] = useState<Array<TTextList>>([]);
 
   // --------------------------- Function ---------------------------
 
   const onSetValue = (data: TTextList) => {
     // when you have other key you can add below ...
-    setTextList(data);
+    setTextList([...textList, data]);
+  };
+
+  const onDeleteValue = (data: TTextList) => {
+    const deleteValue = textList.filter((item) => item.id !== data.id);
+
+    setTextList(deleteValue);
   };
 
   return (
@@ -25,7 +31,8 @@ const App = () => {
 
         <Input.MultipleInput
           value={textList}
-          setValue={(val) => onSetValue(val)}
+          onSetValue={(val) => onSetValue(val)}
+          onDeleteValue={(val) => onDeleteValue(val)}
           // limitItem={5}
           // specialText="+ "
         />

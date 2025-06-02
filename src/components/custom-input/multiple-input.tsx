@@ -8,7 +8,8 @@ import { InputGuard } from "../guard/input-guard";
 
 type TMultipleInputProps<T> = {
   value: Array<T>;
-  setValue: (item: Array<T>) => void;
+  onSetValue: (item: T) => void;
+  onDeleteValue: (item: T) => void;
 
   limitItem?: number;
   specialText?: string;
@@ -22,7 +23,8 @@ type TModeInput = "FOCUS" | "BLUR";
 
 const MultipleInput = <T extends TExtendsValue>({
   value,
-  setValue,
+  onSetValue,
+  onDeleteValue,
   limitItem = 0,
   specialText = ", ",
 }: TMultipleInputProps<T>) => {
@@ -46,24 +48,20 @@ const MultipleInput = <T extends TExtendsValue>({
     const newValue = {
       id: UUID(),
       text: e.target.value,
-    };
+    } as T;
 
-    const finalValueList = [...value, newValue] as unknown as Array<T>;
-
-    if (!!limitItem && finalValueList.length > limitItem) {
+    if (!!limitItem && value.length + 1 > limitItem) {
       return;
     }
 
-    setValue(finalValueList);
+    onSetValue(newValue);
     setSearch("");
   };
 
   // --------------------------- Function ---------------------------
 
-  const handleDeleteItem = (id: string) => {
-    const delListValue = value.filter((item) => item.id !== id);
-
-    setValue(delListValue);
+  const handleDeleteItem = (item: T) => {
+    onDeleteValue(item);
   };
 
   return (
@@ -98,7 +96,7 @@ const MultipleInput = <T extends TExtendsValue>({
             <BoxBlurList
               key={item.id}
               data={item}
-              onRemove={() => handleDeleteItem(item.id)}
+              onRemove={() => handleDeleteItem(item)}
             />
           )}
           renderFocusMode={(item) => {
