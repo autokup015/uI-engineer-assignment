@@ -7,8 +7,8 @@ How to use
 ```ts
 <Input.MultipleInput
   value={textList}
-  onSetValue={(val) => onSetValue(val)}
-  onDeleteValue={(val) => onDeleteValue(val)}
+  onSetValue={(val) => YourFunction(val)}
+  onDeleteValue={(val) => YourFunction(val)}
   // limitItem={5}
   // specialText="+ "
 />

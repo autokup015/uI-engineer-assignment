@@ -31,8 +31,8 @@ const App = () => {
 
         <Input.MultipleInput
           value={textList}
-          onSetValue={(val) => onSetValue(val)}
-          onDeleteValue={(val) => onDeleteValue(val)}
+          onSetValue={onSetValue}
+          onDeleteValue={onDeleteValue}
           // limitItem={5}
           // specialText="+ "
         />
