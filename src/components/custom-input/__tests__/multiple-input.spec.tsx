@@ -20,15 +20,23 @@ describe("multiple-input.tsx", () => {
     }: {
       value?: Array<{ id: string; text: string }>;
     }) => {
-      const mockAddFunction = vi.fn();
+      const mockSetValue = vi.fn();
+
+      const mockDeleteValue = vi.fn();
 
       const agrs = render(
-        <MultipleInput value={value} setValue={mockAddFunction} limitItem={3} />
+        <MultipleInput
+          value={value}
+          onSetValue={mockSetValue}
+          onDeleteValue={mockDeleteValue}
+          limitItem={3}
+        />
       );
 
       return {
         ...agrs,
-        mockAddFunction,
+        mockSetValue,
+        mockDeleteValue,
       };
     };
 
@@ -49,43 +57,52 @@ describe("multiple-input.tsx", () => {
     });
 
     it("should add value with input", async () => {
-      const { user, mockAddFunction } = setup({});
+      const { user, mockSetValue } = setup({});
       const getInput = screen.getByTestId("input-text");
 
       await user.type(getInput, "mock-data");
       await user.keyboard("{Enter}");
 
-      expect(mockAddFunction).toHaveBeenCalledTimes(1);
+      expect(mockSetValue).toHaveBeenCalledTimes(1);
     });
 
     it("should not add value when use another key excetp Enter", async () => {
-      const { user, mockAddFunction } = setup({});
+      const { user, mockSetValue } = setup({});
       const getInput = screen.getByTestId("input-text");
 
       await user.type(getInput, "mock-data");
       await user.keyboard("{Tap}");
 
-      expect(mockAddFunction).not.toHaveBeenCalled();
+      expect(mockSetValue).not.toHaveBeenCalled();
     });
 
     it("should add data when data have 2 , limit is 3", async () => {
-      const { user, mockAddFunction } = setup({ value: mockValue });
+      const { user, mockSetValue } = setup({ value: mockValue });
       const getInput = screen.getByTestId("input-text");
 
       await user.type(getInput, "mock-data");
       await user.keyboard("{Enter}");
 
-      expect(mockAddFunction).toHaveBeenCalledTimes(1);
+      expect(mockSetValue).toHaveBeenCalledTimes(1);
     });
 
     it("should not add data when data have 3 , limit is 3", async () => {
-      const { user, mockAddFunction } = setup({ value: mockValueLimit });
+      const { user, mockSetValue } = setup({ value: mockValueLimit });
       const getInput = screen.getByTestId("input-text");
 
       await user.type(getInput, "mock-data");
       await user.keyboard("{Enter}");
 
-      expect(mockAddFunction).not.toHaveBeenCalledTimes(1);
+      expect(mockSetValue).not.toHaveBeenCalledTimes(1);
+    });
+
+    it("should delete item", async () => {
+      const { user, mockDeleteValue } = setup({ value: mockValueLimit });
+      const getBtnDel = screen.getAllByTestId("button-del");
+
+      await user.click(getBtnDel[0]);
+
+      expect(mockDeleteValue).toHaveBeenCalled();
     });
   });
 
